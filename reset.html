@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="author" content="Prisha Patel">
+  <meta name="theme-color" content="#1c5a70">
+  <meta name="robots" content="noindex">
+  <script>
+    try { document.documentElement.dataset.theme = localStorage.getItem('botbench.theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch (e) { /* light it is */ }
+  </script>
+  <title>New password · BotBench</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/src/styles/account.css">
+</head>
+<body class="mat-grid">
+  <a class="auth-brand" href="/">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="7" width="24" height="19" rx="7" fill="#f6f8f7"/><rect x="8" y="11" width="16" height="11" rx="4" fill="#15232a"/><rect x="11" y="14" width="3" height="5" rx="1.5" fill="#8bf0ff"/><rect x="18" y="14" width="3" height="5" rx="1.5" fill="#8bf0ff"/><circle cx="16" cy="4" r="2.5" fill="#e2484e"/></svg>
+    BotBench
+  </a>
+
+  <main class="auth">
+    <section class="auth-card" aria-labelledby="title">
+      <h1 id="title">Pick a new password</h1>
+      <p class="auth-sub">This logs you out everywhere else, just in case.</p>
+
+      <form id="reset-form" data-api="reset">
+        <label class="field">New password
+          <input type="password" name="password" autocomplete="new-password" minlength="8" maxlength="200" required>
+          <small>At least 8 characters.</small>
+        </label>
+        <p class="form-error" role="alert" hidden></p>
+        <button class="btn" type="submit">Save it and log in</button>
+      </form>
+    </section>
+
+    <p class="auth-alt">Remembered it? <a href="/login">Log in</a></p>
+  </main>
+
+  <p class="auth-foot">Made by Prisha Patel</p>
+
+  <script type="module" src="/src/account/main.js"></script>
+</body>
+</html>

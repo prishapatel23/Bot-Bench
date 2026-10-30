@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="author" content="Prisha Patel">
+  <meta name="theme-color" content="#1c5a70">
+  <script>
+    // Set the theme before anything paints
+    try { document.documentElement.dataset.theme = localStorage.getItem('botbench.theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch (e) { /* light it is */ }
+  </script>
+  <title>BotBench workbench</title>
+  <meta name="description" content="The BotBench workbench: pick parts, wire the pins, write Arduino code and run your robot in a virtual arena.">
+  <!-- Link previews. Swap botbench.vercel.app for the real domain once it's deployed. -->
+  <link rel="canonical" href="https://botbench.vercel.app/studio">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BotBench">
+  <meta property="og:title" content="BotBench workbench">
+  <meta property="og:description" content="Pick parts, wire the pins, write Arduino code and run your robot in a virtual arena. Free, runs in your browser, account optional.">
+  <meta property="og:url" content="https://botbench.vercel.app/studio">
+  <meta property="og:image" content="https://botbench.vercel.app/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Pip the robot standing on a line next to the word BotBench">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="BotBench workbench">
+  <meta name="twitter:description" content="Pick parts, wire the pins, write Arduino code and run your robot in a virtual arena.">
+  <meta name="twitter:image" content="https://botbench.vercel.app/og.png">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="/src/styles/studio.css">
+</head>
+<body>
+  <header class="bar">
+    <a class="brand" href="/" aria-label="BotBench home">
+      <svg class="mini-pip" id="mini-pip" viewBox="0 0 64 56" aria-hidden="true">
+        <line x1="32" y1="9" x2="32" y2="3" stroke="#9aa7ad" stroke-width="2.5" stroke-linecap="round"/>
+        <circle class="ant" cx="32" cy="3" r="3" fill="#e2484e"/>
+        <rect x="6" y="9" width="52" height="42" rx="13" fill="#f6f8f7"/>
+        <rect x="12" y="15" width="40" height="29" rx="9" fill="#15232a"/>
+        <g class="eyes"><rect class="eye" x="20" y="22" width="8" height="12" rx="4" fill="#8bf0ff"/><rect class="eye" x="36" y="22" width="8" height="12" rx="4" fill="#8bf0ff"/></g>
+      </svg>
+    </a>
+    <input class="project-name" id="project-name" aria-label="Robot name" spellcheck="false">
+    <nav class="tabs" role="tablist" aria-label="Workbench">
+      <button role="tab" id="tab-btn-robot" aria-controls="tab-robot" aria-selected="true" data-icon="robot">Robot</button>
+      <button role="tab" id="tab-btn-arena" aria-controls="tab-arena" aria-selected="false" data-icon="map">Arena</button>
+      <button role="tab" id="tab-btn-run" aria-controls="tab-run" aria-selected="false" data-icon="code">Code &amp; run</button>
+    </nav>
+    <div class="bar-actions">
+      <a class="btn quiet small" id="btn-account" href="/login?next=/studio" data-icon="user" hidden><span class="label">Log in</span></a>
+      <button class="btn quiet small" id="btn-share" type="button" title="Copy a link to this robot, arena and code" data-icon="share"><span class="label">Share</span></button>
+      <button class="btn quiet small icon-only" id="btn-theme" type="button" aria-label="Dark mode" aria-pressed="false" data-icon="moon"></button>
+      <button class="btn quiet small icon-only" id="btn-tour" type="button" aria-label="Show me around" title="Show me around" data-icon="help"></button>
+      <button class="btn quiet small" id="btn-export" type="button" title="Save this project to a file" data-icon="download"><span class="label">Export</span></button>
+      <label class="btn quiet small" title="Open a project file" data-icon="upload"><span class="label">Import</span><input type="file" id="file-import" accept=".json,application/json" hidden></label>
+      <div class="share-pop" id="share-pop" role="status" hidden>
+        <p id="share-pop-text"></p>
+        <input id="share-link" aria-label="Share link" readonly hidden>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Robot -->
+    <section class="panel robot-panel" id="tab-robot" role="tabpanel" aria-labelledby="tab-btn-robot">
+      <aside class="picker" aria-label="Parts">
+        <div class="group">
+          <h2>Kind of bot</h2>
+          <div class="seg" id="kind-seg" role="group" aria-label="Kind of bot">
+            <button type="button" data-kind="line" data-icon="line">Line follower</button>
+            <button type="button" data-kind="maze" data-icon="maze">Maze solver</button>
+            <button type="button" data-kind="grab" data-icon="grab">Grabber</button>
+            <button type="button" data-kind="avoid" data-icon="avoid">Obstacle avoider</button>
+            <button type="button" data-kind="sumo" data-icon="sumo">Sumo</button>
+          </div>
+        </div>
+        <div class="group" id="part-groups"></div>
+        <div class="group">
+          <h2>Sensors</h2>
+          <div id="sensor-list"></div>
+          <div class="add-sensor">
+            <select id="add-sensor-type" aria-label="Sensor to add"></select>
+            <button class="btn small" type="button" id="add-sensor" data-icon="plus">Add</button>
+          </div>
+        </div>
+      </aside>
+
+      <div class="preview mat-grid">
+        <canvas id="robot-canvas" role="img" aria-label="Top view of your robot" aria-describedby="specs"></canvas>
+        <dl class="specs" id="specs"></dl>
+        <button class="btn small bom-open" type="button" id="bom-open">Parts list</button>
+      </div>
+
+      <aside class="wiring" aria-label="Wiring">
+        <h2>Wiring</h2>
+        <p class="hint">Which board pin each wire goes to. <span class="pwm-key">~</span> marks PWM pins. Tap a wire or a row to find its match.</p>
+        <div class="wiring-cols">
+          <figure class="wire-figure">
+            <div class="wire-diagram" id="wire-diagram"></div>
+            <figcaption class="wire-legend">
+              <span style="--c: #e2484e">5V</span><span style="--c: #f08a24">3.3V</span><span style="--c: #2b2f33">GND</span><span style="--c: #f3c326">PWM</span><span style="--c: #2f7fd8">signal</span>
+            </figcaption>
+          </figure>
+          <div>
+            <table class="pins"><tbody id="pin-rows"></tbody></table>
+            <ul class="issues" id="wiring-issues"></ul>
+          </div>
+        </div>
+      </aside>
+
+      <dialog class="diff-dialog bom-dialog" id="bom-dialog" aria-labelledby="bom-title">
+        <header>
+          <h2 id="bom-title">Parts list</h2>
+          <p>Rough street prices for clone boards and common modules. Shop around, they move a lot.</p>
+        </header>
+        <div class="bom-body">
+          <table class="bom">
+            <thead><tr><th class="num">Qty</th><th>Part</th><th class="num">USD</th><th class="num">INR</th></tr></thead>
+            <tbody id="bom-rows"></tbody>
+            <tfoot><tr><td></td><th>Total</th><td class="num" id="bom-total-usd"></td><td class="num" id="bom-total-inr"></td></tr></tfoot>
+          </table>
+          <p class="hint" id="bom-missing" hidden></p>
+          <textarea class="bom-text" id="bom-text" rows="8" readonly hidden aria-label="Parts list as text"></textarea>
+        </div>
+        <footer>
+          <button class="btn quiet" type="button" id="bom-close">Close</button>
+          <button class="btn quiet" type="button" id="bom-csv" data-icon="download">Download .csv</button>
+          <button class="btn" type="button" id="bom-copy">Copy</button>
+        </footer>
+      </dialog>
+    </section>
+
+    <!-- Arena -->
+    <section class="panel arena-panel" id="tab-arena" role="tabpanel" aria-labelledby="tab-btn-arena" hidden>
+      <aside class="maps" aria-label="Arenas">
+        <div class="maps-head">
+          <h2>Ready-made</h2>
+          <button class="btn quiet small" type="button" id="btn-challenges" data-icon="target">Challenges</button>
+        </div>
+        <ul id="preset-list" class="map-list"></ul>
+        <h2>Saved by you</h2>
+        <ul id="saved-list" class="map-list"></ul>
+        <p class="hint" id="saved-empty">Draw your own and press Save to keep it here.</p>
+      </aside>
+      <div class="editor">
+        <div class="toolbar" role="toolbar" aria-label="Drawing tools">
+          <div class="tools" id="tools">
+            <button type="button" data-tool="tape" data-icon="tape" title="Draw tape freehand">Tape</button>
+            <button type="button" data-tool="straight" data-icon="straight" title="Draw a straight piece of tape">Straight tape</button>
+            <button type="button" data-tool="wall" data-icon="wall" title="Drag to place a wall">Wall</button>
+            <button type="button" data-tool="erase" data-icon="erase" title="Remove tape, walls and cans">Eraser</button>
+            <button type="button" data-tool="start" data-icon="start" title="Click to place the robot, drag to aim it">Start</button>
+            <button type="button" data-tool="finish" data-icon="finish" title="Drag to mark the finish zone">Finish</button>
+            <button type="button" data-tool="can" data-icon="can" title="Place a can for the gripper">Can</button>
+          </div>
+          <div class="tools">
+            <label class="check"><input type="checkbox" id="snap" checked> Snap</label>
+            <button type="button" id="undo" title="Undo (Ctrl+Z)" data-icon="undo">Undo</button>
+            <button type="button" id="clear" data-icon="trash">Clear</button>
+          </div>
+        </div>
+        <div class="arena-stage mat-grid">
+          <canvas id="arena-canvas" aria-label="Arena editor. Arrow keys move the robot's start, Shift moves it further, [ and ] turn it." aria-describedby="arena-desc"></canvas>
+          <p class="visually-hidden" id="arena-desc" aria-live="polite"></p>
+        </div>
+        <div class="arena-meta">
+          <input id="arena-name" aria-label="Arena name" spellcheck="false">
+          <label>Goal
+            <select id="arena-mission">
+              <option value="reach">Reach the finish</option>
+              <option value="deliver">Deliver the can</option>
+            </select>
+          </label>
+          <label>Size
+            <select id="arena-size">
+              <option value="1600x1200">1.6 × 1.2 m</option>
+              <option value="2400x1600">2.4 × 1.6 m</option>
+              <option value="3200x2000">3.2 × 2.0 m</option>
+            </select>
+          </label>
+          <button class="btn small" type="button" id="save-arena" data-icon="save">Save arena</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Code & run -->
+    <section class="panel run-panel view-code" id="tab-run" role="tabpanel" aria-labelledby="tab-btn-run" hidden>
+      <div class="run-switch seg" id="run-switch" role="group" aria-label="Show">
+        <button type="button" data-view="code" aria-pressed="true" data-icon="code">Sketch</button>
+        <button type="button" data-view="sim" aria-pressed="false" data-icon="play">Run and coach</button>
+      </div>
+      <div class="code-col">
+        <div class="code-head">
+          <h2>Sketch</h2>
+          <div class="code-actions">
+            <button class="btn quiet small" type="button" id="btn-starter" data-icon="reset">Start over</button>
+            <button class="btn quiet small" type="button" id="btn-example" data-icon="compare">Compare with a working version</button>
+            <button class="btn quiet small" type="button" id="btn-ino" title="Save the sketch as an .ino file for the Arduino IDE" data-icon="download">.ino</button>
+          </div>
+        </div>
+        <details class="tune" id="tune" open hidden>
+          <summary>Tune <span>drag to change a number in your sketch</span></summary>
+          <div class="tune-rows" id="tune-rows"></div>
+        </details>
+        <div class="editor-host" id="editor"></div>
+      </div>
+
+      <div class="sim-col">
+        <div class="sim-stage mat-grid">
+          <canvas id="sim-canvas" role="img" aria-label="Simulation of your robot in the arena" aria-describedby="sim-status"></canvas>
+          <div class="sim-status" id="sim-status" role="status"></div>
+          <div class="ghost-key" id="ghost-key" hidden><span class="last">last run</span><span class="this">this run</span></div>
+          <figure class="cam-view" id="cam-view" hidden>
+            <canvas id="cam-canvas" role="img" aria-label="What the camera sees"></canvas>
+            <figcaption>What the Pixy2 sees</figcaption>
+          </figure>
+          <div class="controls" role="toolbar" aria-label="Simulation">
+            <button class="btn run-btn" type="button" id="btn-run" data-icon="play">Run</button>
+            <button class="ctl" type="button" id="btn-skip" title="Run the whole thing instantly and show the result" data-icon="skip"><span class="label">Skip to result</span></button>
+            <button class="ctl" type="button" id="btn-reset" title="Put the robot back at the start" data-icon="reset"><span class="label">Reset</span></button>
+            <span class="sep"></span>
+            <div class="speed seg" id="speed-seg" role="group" aria-label="Speed">
+              <button type="button" data-speed="0.5">½×</button>
+              <button type="button" data-speed="1" aria-pressed="true">1×</button>
+              <button type="button" data-speed="2">2×</button>
+              <button type="button" data-speed="4">4×</button>
+            </div>
+            <select id="sim-speed" hidden><option value="0.5">½×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select>
+            <label class="ctl toggle" title="Keep the camera on the robot"><input type="checkbox" id="follow"><span data-icon="target"></span><span class="label">Follow</span></label>
+            <label class="ctl toggle" title="Show the path from the last run"><input type="checkbox" id="ghost" checked><span data-icon="tape"></span><span class="label">Last run</span></label>
+            <span class="clock" id="sim-clock">0.0 s</span>
+          </div>
+        </div>
+        <div class="telemetry">
+          <div class="readout" id="readout"></div>
+          <canvas class="motor-chart" id="motor-chart" role="img" aria-label="Motor power over the last few seconds"></canvas>
+        </div>
+        <div class="dock">
+          <div class="dock-tabs" role="tablist" aria-label="Output">
+            <button role="tab" id="dock-btn-coach" aria-selected="true" aria-controls="dock-coach" data-icon="bulb">Coach</button>
+            <button role="tab" id="dock-btn-serial" aria-selected="false" aria-controls="dock-serial" data-icon="code">Serial monitor</button>
+            <button role="tab" id="dock-btn-plot" aria-selected="false" aria-controls="dock-plot" data-icon="line">Plotter</button>
+          </div>
+          <div class="dock-body" id="dock-coach" role="tabpanel" aria-labelledby="dock-btn-coach" aria-live="polite"></div>
+          <pre class="dock-body serial" id="dock-serial" role="tabpanel" aria-labelledby="dock-btn-serial" hidden></pre>
+          <div class="dock-body plotter" id="dock-plot" role="tabpanel" aria-labelledby="dock-btn-plot" hidden>
+            <div class="plot-head">
+              <div class="plot-legend" id="plot-legend"></div>
+              <label class="check"><input type="checkbox" id="plot-sensors"> Sensors</label>
+            </div>
+            <div class="plot-area">
+              <canvas id="plot-canvas" role="img" aria-label="Numbers printed to Serial, over the last few seconds"></canvas>
+              <p class="plot-empty" id="plot-empty">Print numbers with <code>Serial.println(error)</code>, or several at once like <code>error:-2,turn:40</code>, and they are graphed here. Tick Sensors to see the sensor readings without any code.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="diff-dialog" id="diff-dialog" aria-labelledby="diff-title">
+    <header>
+      <h2 id="diff-title">A version that works with this robot</h2>
+      <p>Built for the parts and pins you chose. Green lines are new, red lines are yours that change.</p>
+    </header>
+    <div class="diff" id="diff"></div>
+    <footer>
+      <button class="btn quiet" type="button" id="diff-close">Keep mine</button>
+      <button class="btn" type="button" id="diff-use">Use this version</button>
+    </footer>
+  </dialog>
+
+  <dialog class="diff-dialog challenge-dialog" id="challenge-dialog" aria-labelledby="challenge-title">
+    <header>
+      <h2 id="challenge-title">Challenges</h2>
+      <p>Finish an arena to earn a star. Beat the silver and gold targets for more.</p>
+    </header>
+    <ul class="challenge-list" id="challenge-list"></ul>
+    <footer>
+      <button class="btn quiet" type="button" id="challenge-close">Close</button>
+    </footer>
+  </dialog>
+
+  <dialog class="diff-dialog account-dialog" id="account-dialog" aria-labelledby="account-title">
+    <header>
+      <h2 id="account-title">Your robots</h2>
+      <p id="account-who"></p>
+    </header>
+    <div class="account-body">
+      <ul class="cloud-list" id="cloud-list"></ul>
+      <p class="hint" id="cloud-empty" hidden>Nothing saved yet. Save the robot you have open and it'll be here on any device you log in on.</p>
+      <p class="hint" id="cloud-status" role="status"></p>
+    </div>
+    <footer>
+      <button class="btn quiet" type="button" id="account-logout">Log out</button>
+      <span class="spacer"></span>
+      <button class="btn quiet" type="button" id="account-close" autofocus>Close</button>
+      <button class="btn" type="button" id="cloud-save" data-icon="cloud">Save this robot</button>
+    </footer>
+  </dialog>
+
+  <dialog class="ask-dialog" id="share-ask" aria-labelledby="share-ask-title">
+    <h2 id="share-ask-title">Open shared robot?</h2>
+    <p>It replaces the robot you have open. Export yours first if you want to keep a copy.</p>
+    <footer>
+      <button class="btn quiet" type="button" id="share-ask-export" data-icon="download">Export mine</button>
+      <button class="btn quiet" type="button" id="share-ask-keep">Keep mine</button>
+      <button class="btn" type="button" id="share-ask-open">Open shared robot</button>
+    </footer>
+  </dialog>
+
+  <script type="module" src="/src/studio/main.js"></script>
+</body>
+</html>

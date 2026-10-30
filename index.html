@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="author" content="Prisha Patel">
+  <meta name="theme-color" content="#1c5a70">
+  <meta name="description" content="Design a robot from real parts, write Arduino code for it and test it in a virtual arena, right in your browser.">
+  <title>BotBench</title>
+  <!-- Link previews. Swap botbench.vercel.app for the real domain once it's deployed. -->
+  <link rel="canonical" href="https://botbench.vercel.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BotBench">
+  <meta property="og:title" content="BotBench: build a robot, write the code, watch it drive">
+  <meta property="og:description" content="Pick real parts, wire them to a real board, write Arduino code and test it in a virtual arena. Free, runs in your browser, account optional.">
+  <meta property="og:url" content="https://botbench.vercel.app/">
+  <meta property="og:image" content="https://botbench.vercel.app/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Pip the robot standing on a line next to the word BotBench">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="BotBench: build a robot, write the code, watch it drive">
+  <meta name="twitter:description" content="Pick real parts, wire them to a real board, write Arduino code and test it in a virtual arena. Free, runs in your browser, account optional.">
+  <meta name="twitter:image" content="https://botbench.vercel.app/og.png">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="/src/styles/landing.css">
+</head>
+<body class="intro">
+  <header class="nav" id="nav">
+    <a class="brand" href="/">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="7" width="24" height="19" rx="7" fill="#f6f8f7"/><rect x="8" y="11" width="16" height="11" rx="4" fill="#15232a"/><rect x="11" y="14" width="3" height="5" rx="1.5" fill="#8bf0ff"/><rect x="18" y="14" width="3" height="5" rx="1.5" fill="#8bf0ff"/><circle cx="16" cy="4" r="2.5" fill="#e2484e"/></svg>
+      BotBench
+    </a>
+    <nav aria-label="Sections">
+      <a href="#how">How it works</a>
+      <a href="#parts">Parts</a>
+      <a href="#demo">Demo</a>
+      <a href="#bots">Bots</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="nav-login" href="/login">Log in</a>
+    <a class="btn small" href="/studio">Open the workbench</a>
+  </header>
+
+  <section class="hero mat-grid" id="hero" aria-label="Welcome">
+    <div class="hero-light" aria-hidden="true"></div>
+
+    <div class="floaters" aria-hidden="true">
+      <svg class="floater f1" data-depth="0.9" viewBox="0 0 40 60"><path d="M8 30a12 12 0 0 1 24 0v8H8z" fill="#e2484e"/><rect x="6" y="36" width="28" height="5" rx="2" fill="#c93a40"/><path d="M14 41v18M26 41v14" stroke="#c9d1d5" stroke-width="2.5"/><ellipse cx="16" cy="26" rx="3" ry="5" fill="#ff9da1" opacity="0.8"/></svg>
+      <svg class="floater f2" data-depth="0.5" viewBox="0 0 80 24"><path d="M0 12h16M64 12h16" stroke="#c9d1d5" stroke-width="2.5"/><rect x="16" y="4" width="48" height="16" rx="8" fill="#e8d3a9"/><rect x="26" y="4" width="4" height="16" fill="#8a5a2b"/><rect x="34" y="4" width="4" height="16" fill="#15232a"/><rect x="42" y="4" width="4" height="16" fill="#e2484e"/><rect x="54" y="4" width="3" height="16" fill="#d9a90d"/></svg>
+      <svg class="floater f3" data-depth="1.2" viewBox="0 0 60 60"><circle cx="30" cy="30" r="28" fill="#23272a"/><circle cx="30" cy="30" r="19" fill="#f3c326"/><path d="M30 13v34M13 30h34" stroke="#d9a90d" stroke-width="5"/><circle cx="30" cy="30" r="5" fill="#23272a"/></svg>
+      <svg class="floater f4" data-depth="0.35" viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="#b9c2c6"/><path d="M8 15h14" stroke="#58646a" stroke-width="3"/></svg>
+      <svg class="floater f5" data-depth="0.7" viewBox="0 0 70 40"><rect x="2" y="4" width="66" height="32" rx="3" fill="#2462b8"/><circle cx="20" cy="20" r="11" fill="#c9d1d5"/><circle cx="50" cy="20" r="11" fill="#c9d1d5"/><circle cx="20" cy="20" r="6" fill="#58646a"/><circle cx="50" cy="20" r="6" fill="#58646a"/></svg>
+      <svg class="floater f6" data-depth="1" viewBox="0 0 90 50"><path d="M5 45 C 20 0, 60 0, 85 30" fill="none" stroke="#f3c326" stroke-width="5" stroke-linecap="round"/><rect x="0" y="40" width="10" height="10" rx="2" fill="#15232a"/><rect x="80" y="25" width="10" height="10" rx="2" fill="#15232a"/></svg>
+      <svg class="floater f7" data-depth="0.6" viewBox="0 0 50 40"><rect x="2" y="8" width="34" height="24" rx="3" fill="#3c7be0"/><circle cx="28" cy="20" r="5" fill="#e7ecee"/><path d="M33 20h15" stroke="#e7ecee" stroke-width="5" stroke-linecap="round"/></svg>
+    </div>
+
+    <div class="hero-stage">
+      <span class="word word-left" aria-hidden="true">BOT</span>
+      <div class="pip-wrap">
+        <p class="bubble" id="bubble" role="status">Hi, I'm Pip. Want to build me a friend?</p>
+        <svg class="pip" id="pip" viewBox="0 0 360 440" role="img" aria-label="Pip, a small friendly robot, waving hello">
+          <defs>
+            <linearGradient id="shell" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff"/>
+              <stop offset="1" stop-color="#dfe6e3"/>
+            </linearGradient>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="4" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <ellipse class="pip-shadow" cx="180" cy="426" rx="112" ry="10" fill="rgba(0,0,0,0.25)"/>
+          <g class="pip-body">
+            <g class="arm arm-right">
+              <rect x="260" y="282" width="56" height="24" rx="12" fill="url(#shell)"/>
+              <circle cx="320" cy="294" r="16" fill="#f3c326"/>
+            </g>
+            <g class="tread">
+              <rect x="104" y="370" width="152" height="42" rx="21" fill="#23272a"/>
+              <g class="hub" style="transform-origin: 134px 391px"><circle cx="134" cy="391" r="11" fill="#9aa7ad"/><rect x="132" y="382" width="4" height="18" fill="#23272a"/></g>
+              <g class="hub" style="transform-origin: 180px 391px"><circle cx="180" cy="391" r="11" fill="#9aa7ad"/><rect x="178" y="382" width="4" height="18" fill="#23272a"/></g>
+              <g class="hub" style="transform-origin: 226px 391px"><circle cx="226" cy="391" r="11" fill="#9aa7ad"/><rect x="224" y="382" width="4" height="18" fill="#23272a"/></g>
+            </g>
+            <rect x="96" y="256" width="168" height="122" rx="38" fill="url(#shell)"/>
+            <rect x="124" y="282" width="112" height="48" rx="13" fill="#1c5a70"/>
+            <g class="chest">
+              <circle cx="144" cy="306" r="6"/><circle cx="162" cy="306" r="6"/><circle cx="180" cy="306" r="6"/><circle cx="198" cy="306" r="6"/><circle cx="216" cy="306" r="6"/>
+            </g>
+            <rect x="160" y="238" width="40" height="22" rx="6" fill="#9aa7ad"/>
+            <g class="head">
+              <line x1="180" y1="72" x2="180" y2="34" stroke="#9aa7ad" stroke-width="6" stroke-linecap="round"/>
+              <circle class="antenna" cx="180" cy="26" r="10" fill="#e2484e"/>
+              <circle cx="64" cy="156" r="15" fill="#f3c326"/>
+              <circle cx="296" cy="156" r="15" fill="#f3c326"/>
+              <rect x="70" y="70" width="220" height="172" rx="50" fill="url(#shell)"/>
+              <rect class="screen" x="96" y="98" width="168" height="116" rx="32" fill="#15232a"/>
+              <g class="eyes" id="eyes" filter="url(#glow)">
+                <rect class="eye" x="128" y="128" width="32" height="46" rx="15" fill="#8bf0ff"/>
+                <rect class="eye" x="200" y="128" width="32" height="46" rx="15" fill="#8bf0ff"/>
+              </g>
+              <path class="mouth" d="M164 192 q16 12 32 0" fill="none" stroke="#8bf0ff" stroke-width="5" stroke-linecap="round"/>
+              <circle cx="116" cy="190" r="8" fill="#e2484e" opacity="0.45"/>
+              <circle cx="244" cy="190" r="8" fill="#e2484e" opacity="0.45"/>
+            </g>
+            <g class="arm arm-left">
+              <rect x="44" y="282" width="56" height="24" rx="12" fill="url(#shell)"/>
+              <circle cx="40" cy="294" r="16" fill="#f3c326"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <span class="word word-right" aria-hidden="true">BENCH</span>
+      <h1 class="visually-hidden">BotBench</h1>
+    </div>
+    <div class="tape" aria-hidden="true"><i></i></div>
+
+    <div class="hero-copy">
+      <p>Pick real parts, wire them to a real board, write Arduino code and watch your robot drive. When it goes wrong, BotBench shows you where and why.</p>
+      <div class="hero-actions">
+        <a class="btn big" href="/studio">Open the workbench</a>
+        <a class="btn ghost big" href="#demo">See it run</a>
+      </div>
+      <ul class="boards" aria-label="Supported boards">
+        <li>Arduino Uno</li><li>Nano</li><li>Mega 2560</li><li>ESP32</li><li>Pixy2 camera</li>
+      </ul>
+    </div>
+  </section>
+
+  <main>
+    <!-- Scroll story: the robot gets built as you read -->
+    <section class="story" id="how" aria-labelledby="how-title">
+      <div class="story-head">
+        <h2 id="how-title">From parts bin to finish line</h2>
+        <p>Four moves, the same ones you would make at a real bench. Scroll and watch this robot come together.</p>
+      </div>
+      <div class="story-grid">
+        <ol class="story-steps">
+          <li class="story-step" data-scene="0">
+            <span class="step-num">1</span>
+            <h3>Build it</h3>
+            <p>Choose a chassis, a board, motors, a driver and a battery. Every part is a real one with real numbers: an L298N loses two volts, an N20 motor spins at 300 rpm.</p>
+          </li>
+          <li class="story-step" data-scene="1">
+            <span class="step-num">2</span>
+            <h3>Wire it</h3>
+            <p>Give each wire a pin. BotBench catches what a real board would punish: a motor on a pin with no PWM, two parts sharing a pin, a camera fighting the SPI bus.</p>
+          </li>
+          <li class="story-step" data-scene="2">
+            <span class="step-num">3</span>
+            <h3>Code it</h3>
+            <p>Write the sketch you would upload. setup(), loop(), digitalRead, analogWrite, pulseIn, Servo and Pixy2 all behave like the real thing, timing included.</p>
+          </li>
+          <li class="story-step" data-scene="3">
+            <span class="step-num">4</span>
+            <h3>Run it and fix it</h3>
+            <p>Press Run. If the robot leaves the line, the run stops on the spot, the coach explains what your code did wrong and offers a version that works.</p>
+          </li>
+        </ol>
+
+        <div class="story-stage" aria-hidden="true">
+          <div class="stage-card">
+            <div class="stage-bar"><span id="stage-label">Robot</span><span class="stage-dots"><i></i><i></i><i></i><i></i></span></div>
+
+            <svg class="scene scene-build" viewBox="0 0 400 400">
+              <defs>
+                <pattern id="bp" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="rgba(28,90,112,0.08)"/></pattern>
+              </defs>
+              <rect width="400" height="400" fill="url(#bp)"/>
+              <g class="b-shadow"><circle cx="206" cy="212" r="118" fill="rgba(0,0,0,0.1)"/></g>
+              <circle class="b-chassis" cx="200" cy="205" r="118" fill="#e8f4f8" stroke="#9db4bc" stroke-width="2"/>
+              <g class="b-wheel-l"><rect x="62" y="160" width="30" height="90" rx="8" fill="#23272a"/><rect x="92" y="190" width="18" height="30" fill="#f3c326"/></g>
+              <g class="b-wheel-r"><rect x="308" y="160" width="30" height="90" rx="8" fill="#23272a"/><rect x="290" y="190" width="18" height="30" fill="#f3c326"/></g>
+              <g class="b-battery"><rect x="160" y="250" width="80" height="44" rx="6" fill="#2f6fd1"/><rect x="168" y="258" width="64" height="12" rx="6" fill="#4a86e0"/></g>
+              <g class="b-driver"><rect x="170" y="200" width="60" height="44" rx="4" fill="#c8343a"/><rect x="182" y="206" width="36" height="16" fill="#2a2d30"/></g>
+              <g class="b-board"><rect x="150" y="120" width="100" height="74" rx="6" fill="#1b6f8f"/><rect x="160" y="124" width="80" height="6" fill="#0d2f3b"/><rect x="176" y="150" width="48" height="14" fill="#15232a"/><circle cx="238" cy="182" r="3" fill="#f3c326"/></g>
+              <g class="b-sensor"><rect x="160" y="88" width="80" height="20" rx="4" fill="#1f2a30"/><circle cx="178" cy="98" r="5" fill="#ff4d4d"/><circle cx="200" cy="98" r="5" fill="#5d6a70"/><circle cx="222" cy="98" r="5" fill="#5d6a70"/></g>
+              <circle class="b-caster" cx="200" cy="312" r="10" fill="#9aa7ad"/>
+              <g class="b-label" font-family="Atkinson Hyperlegible" font-size="13" fill="#4b5d64">
+                <path d="M250 150 L300 120 H350" stroke="#9db4bc" fill="none"/><text x="300" y="114">Arduino Uno</text>
+                <path d="M170 222 L110 290 H50" stroke="#9db4bc" fill="none"/><text x="50" y="284">L298N</text>
+                <path d="M160 98 L110 60 H50" stroke="#9db4bc" fill="none"/><text x="50" y="54">3-ch IR array</text>
+              </g>
+            </svg>
+
+            <svg class="scene scene-wire" viewBox="0 0 400 400">
+              <rect width="400" height="400" fill="url(#bp)"/>
+              <rect x="40" y="140" width="150" height="120" rx="8" fill="#1b6f8f"/>
+              <g fill="#0d2f3b"><rect x="52" y="146" width="126" height="10" rx="2"/></g>
+              <g class="pins" font-family="JetBrains Mono" font-size="10" fill="#cfe7ef">
+                <text x="56" y="176">2</text><text x="80" y="176">3</text><text x="104" y="176">4</text><text x="128" y="176">~5</text><text x="156" y="176">~6</text>
+              </g>
+              <rect x="250" y="60" width="110" height="34" rx="5" fill="#1f2a30"/>
+              <circle cx="275" cy="77" r="5" fill="#5d6a70"/><circle cx="305" cy="77" r="5" fill="#5d6a70"/><circle cx="335" cy="77" r="5" fill="#5d6a70"/>
+              <rect x="250" y="270" width="110" height="80" rx="5" fill="#c8343a"/><rect x="268" y="278" width="74" height="26" fill="#2a2d30"/>
+              <path class="wire" d="M60 150 C 60 70, 230 40, 275 64" stroke="#f3c326"/>
+              <path class="wire" d="M84 150 C 90 90, 240 70, 305 64" stroke="#e2484e"/>
+              <path class="wire" d="M108 150 C 120 110, 260 100, 335 64" stroke="#3c7be0"/>
+              <path class="wire" d="M132 262 C 140 330, 230 330, 268 320" stroke="#3fae6a"/>
+              <path class="wire" d="M160 262 C 170 300, 230 290, 268 300" stroke="#e7a6ff"/>
+              <g class="wire-ok"><circle cx="200" cy="370" r="12" fill="#3fae6a"/><path d="M194 370l4 4 8-8" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><text x="220" y="375" font-family="Atkinson Hyperlegible" font-size="14" fill="#2b7a4b">Wiring looks right</text></g>
+            </svg>
+
+            <div class="scene scene-code">
+              <pre id="story-code"></pre>
+            </div>
+
+            <svg class="scene scene-run" viewBox="0 0 400 400">
+              <rect x="10" y="10" width="380" height="380" rx="16" fill="#fbfcfb"/>
+              <path id="run-path" d="M60 330 C 60 120, 180 80, 220 180 S 340 300, 330 70" fill="none" stroke="#1a1d1f" stroke-width="12" stroke-linecap="round"/>
+              <path class="run-trail" d="" fill="none" stroke="rgba(226,72,78,0.5)" stroke-width="4" stroke-linecap="round"/>
+              <g class="run-bot"><circle r="16" fill="#e8f4f8" stroke="#9db4bc" stroke-width="2"/><rect x="-14" y="-18" width="28" height="7" rx="2" fill="#23272a"/><rect x="-14" y="11" width="28" height="7" rx="2" fill="#23272a"/><rect x="10" y="-6" width="6" height="12" rx="2" fill="#1f2a30"/></g>
+              <g class="run-miss"><circle r="11" fill="#e2484e" stroke="#fff" stroke-width="3"/><circle r="22" fill="none" stroke="rgba(226,72,78,0.35)" stroke-width="2"/></g>
+            </svg>
+            <div class="scene-note" id="scene-note"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="parts mat-grid" id="parts" aria-labelledby="parts-title">
+      <div class="parts-head">
+        <h2 id="parts-title">Real parts, with their real quirks</h2>
+        <p>Every part behaves like the one in your kit. Hover one to look closer.</p>
+      </div>
+      <ul class="bin">
+        <li class="bin-item reveal">
+          <div class="bin-art">
+            <svg viewBox="0 0 160 120" aria-hidden="true" class="pc pc-uno">
+              <rect x="10" y="12" width="140" height="100" rx="8" fill="#1b6f8f"/>
+              <rect x="34" y="16" width="104" height="8" rx="2" fill="#0d2f3b"/>
+              <rect x="52" y="100" width="86" height="8" rx="2" fill="#0d2f3b"/>
+              <rect x="2" y="28" width="26" height="24" rx="3" fill="#c9d1d5"/>
+              <rect x="4" y="76" width="22" height="22" rx="4" fill="#23272a"/>
+              <rect x="68" y="56" width="60" height="16" rx="2" fill="#15232a"/>
+              <circle class="led13" cx="58" cy="34" r="3.5" fill="#f3c326"/>
+              <text x="98" y="92" font-family="Unbounded" font-size="12" fill="#e9f2f4">UNO</text>
+            </svg>
+          </div>
+          <h3>Arduino Uno</h3>
+          <p>6 PWM pins out of 14. Pick the wrong one and speed control turns into on and off.</p>
+        </li>
+        <li class="bin-item reveal">
+          <div class="bin-art">
+            <svg viewBox="0 0 160 120" aria-hidden="true" class="pc pc-motor">
+              <rect x="14" y="44" width="78" height="34" rx="5" fill="#f3c326"/>
+              <rect x="18" y="50" width="20" height="22" rx="3" fill="#d9a90d"/>
+              <g class="tt-wheel" style="transform-origin: 112px 61px">
+                <circle cx="112" cy="61" r="40" fill="#23272a"/>
+                <circle cx="112" cy="61" r="28" fill="#f3c326"/>
+                <rect x="108" y="35" width="8" height="52" rx="3" fill="#d9a90d"/>
+                <rect x="86" y="57" width="52" height="8" rx="3" fill="#d9a90d"/>
+                <circle cx="112" cy="61" r="6" fill="#23272a"/>
+              </g>
+            </svg>
+          </div>
+          <h3>TT gear motor</h3>
+          <p>About 200 rpm at 6 V. Below a PWM of 40 it hums and doesn't turn.</p>
+        </li>
+        <li class="bin-item reveal">
+          <div class="bin-art">
+            <svg viewBox="0 0 160 120" aria-hidden="true" class="pc pc-l298">
+              <rect x="24" y="14" width="112" height="96" rx="6" fill="#c8343a"/>
+              <rect x="48" y="20" width="64" height="42" rx="3" fill="#2a2d30"/>
+              <g fill="#3a3f44"><rect x="52" y="20" width="4" height="42"/><rect x="62" y="20" width="4" height="42"/><rect x="72" y="20" width="4" height="42"/><rect x="82" y="20" width="4" height="42"/><rect x="92" y="20" width="4" height="42"/><rect x="102" y="20" width="4" height="42"/></g>
+              <rect x="16" y="40" width="16" height="30" rx="2" fill="#2462b8"/>
+              <rect x="128" y="40" width="16" height="30" rx="2" fill="#2462b8"/>
+              <rect x="54" y="96" width="52" height="8" rx="2" fill="#15232a"/>
+              <g class="heat"><path d="M60 12 q4 -6 0 -10" stroke="#e2484e" stroke-width="2" fill="none"/><path d="M80 12 q4 -6 0 -10" stroke="#e2484e" stroke-width="2" fill="none"/><path d="M100 12 q4 -6 0 -10" stroke="#e2484e" stroke-width="2" fill="none"/></g>
+            </svg>
+          </div>
+          <h3>L298N driver</h3>
+          <p>Loses about 2 V as heat. On four AA cells your motors get only 4 V.</p>
+        </li>
+        <li class="bin-item reveal">
+          <div class="bin-art">
+            <svg viewBox="0 0 160 120" aria-hidden="true" class="pc pc-sonar">
+              <path class="ping p1" d="M130 30 q22 30 0 60" fill="none" stroke="#8bf0ff" stroke-width="3" stroke-linecap="round"/>
+              <path class="ping p2" d="M140 20 q32 40 0 80" fill="none" stroke="#8bf0ff" stroke-width="3" stroke-linecap="round"/>
+              <rect x="10" y="30" width="110" height="60" rx="4" fill="#2462b8"/>
+              <circle cx="40" cy="60" r="22" fill="#c9d1d5"/><circle cx="40" cy="60" r="12" fill="#58646a"/>
+              <circle cx="90" cy="60" r="22" fill="#c9d1d5"/><circle cx="90" cy="60" r="12" fill="#58646a"/>
+            </svg>
+          </div>
+          <h3>HC-SR04 ultrasonic</h3>
+          <p>pulseIn() returns microseconds. Divide by 58 for centimetres.</p>
+        </li>
+        <li class="bin-item reveal">
+          <div class="bin-art">
+            <svg viewBox="0 0 160 120" aria-hidden="true" class="pc pc-ir">
+              <rect class="tape" x="70" y="0" width="20" height="120" fill="#1a1d1f"/>
+              <rect x="8" y="40" width="144" height="40" rx="5" fill="#1f2a30" opacity="0.92"/>
+              <g class="irs"><circle cx="32" cy="60" r="7"/><circle cx="56" cy="60" r="7"/><circle cx="80" cy="60" r="7"/><circle cx="104" cy="60" r="7"/><circle cx="128" cy="60" r="7"/></g>
+            </svg>
+          </div>
+          <h3>5-channel IR array</h3>
+          <p>Each output goes HIGH over black tape. Five of them are enough for smooth steering.</p>
+        </li>
+        <li class="bin-item reveal">
+          <div class="bin-art">
+            <svg viewBox="0 0 160 120" aria-hidden="true" class="pc pc-grip">
+              <rect x="12" y="42" width="56" height="36" rx="4" fill="#3c7be0"/>
+              <circle cx="56" cy="60" r="8" fill="#e7ecee"/>
+              <g class="jaw jaw-a" style="transform-origin: 70px 52px"><path d="M70 52 L118 40 L132 54" fill="none" stroke="#e7ecee" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></g>
+              <g class="jaw jaw-b" style="transform-origin: 70px 68px"><path d="M70 68 L118 80 L132 66" fill="none" stroke="#e7ecee" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></g>
+            </svg>
+          </div>
+          <h3>SG90 gripper</h3>
+          <p>write(90) opens, write(10) closes. Give it 400 ms before you drive away.</p>
+        </li>
+        <li class="bin-item reveal">
+          <div class="bin-art">
+            <svg viewBox="0 0 160 120" aria-hidden="true" class="pc pc-pixy">
+              <rect x="30" y="18" width="100" height="84" rx="8" fill="#1d1f22"/>
+              <circle cx="80" cy="58" r="26" fill="#3a3f44"/>
+              <circle cx="80" cy="58" r="15" fill="#5ab0d6"/>
+              <circle class="lens-glint" cx="86" cy="52" r="4" fill="#fff"/>
+              <rect class="lamp" x="40" y="26" width="10" height="8" rx="2" fill="#fff7c2"/>
+              <rect class="lamp" x="110" y="26" width="10" height="8" rx="2" fill="#fff7c2"/>
+              <path class="scan" d="M40 96 H120" stroke="#8bf0ff" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3>Pixy2 camera</h3>
+          <p>Finds the line for you and reports it as a vector. Needs pixy.init() before it answers.</p>
+        </li>
+        <li class="bin-item reveal">
+          <div class="bin-art">
+            <svg viewBox="0 0 160 120" aria-hidden="true" class="pc pc-esp">
+              <rect x="20" y="20" width="120" height="80" rx="6" fill="#1d1f22"/>
+              <rect x="36" y="30" width="70" height="56" rx="3" fill="#b9c2c6"/>
+              <path d="M112 30 h18 v8 h-14 v8 h14 v8 h-14 v8 h14" fill="none" stroke="#d9a90d" stroke-width="3"/>
+              <circle class="led-blue" cx="126" cy="88" r="4" fill="#3c7be0"/>
+            </svg>
+          </div>
+          <h3>ESP32 DevKit</h3>
+          <p>analogRead() goes to 4095, not 1023. Thresholds from Uno tutorials need adjusting.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="demo" id="demo" aria-labelledby="demo-title">
+      <div class="demo-head">
+        <h2 id="demo-title">This one is running real code</h2>
+        <p>A three-sensor line follower running the sketch the workbench generates for it. Swap the steering and watch the coach catch it.</p>
+      </div>
+
+      <div class="window">
+        <div class="win-bar">
+          <span class="win-title">Training oval</span>
+          <span class="pill" id="demo-pill">Running</span>
+          <span class="win-time" id="demo-time">0.0 s</span>
+          <div class="win-actions">
+            <button class="btn small" id="demo-break" type="button">Swap the steering</button>
+            <button class="btn small quiet" id="demo-reset" type="button">Restart</button>
+          </div>
+        </div>
+        <div class="win-body">
+          <div class="win-stage mat-grid">
+            <canvas id="demo-canvas" aria-label="A robot following a black line on a white board"></canvas>
+          </div>
+          <aside class="win-side">
+            <div class="tele">
+              <h3>Sensors</h3>
+              <div class="leds" id="demo-leds" role="group" aria-label="Line sensors"></div>
+            </div>
+            <div class="tele">
+              <h3>Motor power</h3>
+              <canvas class="chart" id="demo-chart" aria-label="Motor power over the last few seconds"></canvas>
+              <div class="legend"><span class="la">Left wheel</span><span class="lb">Right wheel</span></div>
+            </div>
+            <div class="tele code-peek">
+              <h3>loop()</h3>
+              <pre id="demo-code"></pre>
+            </div>
+            <div class="coach-note" id="demo-coach" hidden>
+              <strong id="demo-coach-title"></strong>
+              <p id="demo-coach-text"></p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="bots" id="bots" aria-labelledby="bots-title">
+      <h2 id="bots-title">What you can build</h2>
+      <ul class="bot-list">
+        <li class="bot-card">
+          <svg viewBox="0 0 200 120" aria-hidden="true">
+            <path id="bot-line" d="M10 90 C 50 10, 100 120, 190 30" stroke="#1a1d1f" stroke-width="10" fill="none" stroke-linecap="round"/>
+            <g class="mini-bot mb-line"><circle r="13" fill="#1c5a70"/><rect x="8" y="-5" width="6" height="10" rx="2" fill="#e2484e"/></g>
+          </svg>
+          <h3>Line follower</h3>
+          <p>IR sensors or a Pixy2 camera, two motors, and a loop that never stops correcting.</p>
+        </li>
+        <li class="bot-card">
+          <svg viewBox="0 0 200 120" aria-hidden="true">
+            <path d="M20 10 H180 V110 H20 Z M70 10 V70 M120 50 V110 M70 70 H120 M150 10 V60" stroke="#3a4a52" stroke-width="6" fill="none"/>
+            <g class="mini-bot mb-maze"><circle r="10" fill="#1c5a70"/><path d="M6 -4 l8 4 -8 4z" fill="#8bf0ff"/></g>
+          </svg>
+          <h3>Maze solver</h3>
+          <p>Ultrasonic sensors on three sides and the right-hand rule.</p>
+        </li>
+        <li class="bot-card">
+          <svg viewBox="0 0 200 120" aria-hidden="true">
+            <g class="mb-grab">
+              <circle cx="60" cy="60" r="24" fill="#1c5a70"/>
+              <g class="gj gj-a" style="transform-origin: 82px 52px"><path d="M82 52 L106 46 L114 54" stroke="#9aa7ad" stroke-width="6" fill="none" stroke-linecap="round"/></g>
+              <g class="gj gj-b" style="transform-origin: 82px 68px"><path d="M82 68 L106 74 L114 66" stroke="#9aa7ad" stroke-width="6" fill="none" stroke-linecap="round"/></g>
+            </g>
+            <circle class="can" cx="120" cy="60" r="11" fill="#e2484e"/>
+            <rect x="150" y="30" width="40" height="60" rx="4" fill="rgba(63,174,106,0.2)" stroke="#3fae6a" stroke-width="3" stroke-dasharray="6 5"/>
+          </svg>
+          <h3>Grabber</h3>
+          <p>Find the can, close the gripper, carry it to the drop zone.</p>
+        </li>
+        <li class="bot-card">
+          <svg viewBox="0 0 200 120" aria-hidden="true">
+            <rect x="88" y="16" width="30" height="46" rx="4" fill="#c9a36b"/>
+            <rect x="158" y="64" width="28" height="42" rx="4" fill="#c9a36b"/>
+            <g class="mini-bot mb-avoid"><circle r="11" fill="#1c5a70"/><rect x="7" y="-6" width="5" height="12" rx="1.5" fill="#2462b8"/><path class="sonar" d="M15 -7 q5 7 0 14" stroke="#8bf0ff" stroke-width="2.5" fill="none" stroke-linecap="round"/></g>
+          </svg>
+          <h3>Obstacle avoider</h3>
+          <p>An HC-SR04 up front, and a decision every time something gets closer than 20 cm.</p>
+        </li>
+        <li class="bot-card">
+          <svg viewBox="0 0 200 120" aria-hidden="true">
+            <circle cx="100" cy="60" r="54" fill="#1a1d1f"/>
+            <circle cx="100" cy="60" r="49" fill="none" stroke="#f6f8f7" stroke-width="3"/>
+            <path d="M88 52 v16 M112 52 v16" stroke="#7c8b91" stroke-width="3"/>
+            <g class="sumo-a"><circle cx="68" cy="60" r="12" fill="#1c5a70"/><rect x="78" y="48" width="5" height="24" rx="2" fill="#9aa7ad"/></g>
+            <g class="sumo-b"><circle cx="132" cy="60" r="12" fill="#e2484e"/><rect x="117" y="48" width="5" height="24" rx="2" fill="#9aa7ad"/></g>
+          </svg>
+          <h3>Sumo bot</h3>
+          <p>Stay inside the white edge and push the other robot out of it.</p>
+        </li>
+        <li class="bot-card later">
+          <svg viewBox="0 0 200 120" aria-hidden="true"><g class="sway"><rect x="85" y="10" width="30" height="24" rx="8" fill="#9aa7ad"/><rect x="80" y="36" width="40" height="34" rx="8" fill="#9aa7ad"/><rect x="84" y="70" width="12" height="34" rx="5" fill="#9aa7ad"/><rect x="104" y="70" width="12" height="34" rx="5" fill="#9aa7ad"/></g></svg>
+          <span class="chip">Planned</span>
+          <h3>Humanoid</h3>
+          <p>Walking needs a 3D bench, which comes next.</p>
+        </li>
+        <li class="bot-card later">
+          <svg viewBox="0 0 200 120" aria-hidden="true"><g class="hover"><rect x="85" y="54" width="30" height="16" rx="6" fill="#9aa7ad"/><path d="M85 62 L62 46 M115 62 L138 46 M85 62 L62 78 M115 62 L138 78" stroke="#9aa7ad" stroke-width="4"/><ellipse class="prop" cx="62" cy="46" rx="16" ry="4" fill="#c4cdd1"/><ellipse class="prop" cx="138" cy="46" rx="16" ry="4" fill="#c4cdd1"/><ellipse class="prop" cx="62" cy="78" rx="16" ry="4" fill="#c4cdd1"/><ellipse class="prop" cx="138" cy="78" rx="16" ry="4" fill="#c4cdd1"/></g></svg>
+          <span class="chip">Planned</span>
+          <h3>Drone</h3>
+          <p>After the humanoid.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="about reveal" id="about" aria-labelledby="about-title">
+      <div class="about-art" aria-hidden="true">
+        <svg viewBox="0 0 160 120" class="pc pc-l298">
+          <rect x="24" y="14" width="112" height="96" rx="6" fill="#c8343a"/>
+          <rect x="48" y="20" width="64" height="42" rx="3" fill="#2a2d30"/>
+          <g fill="#3a3f44"><rect x="52" y="20" width="4" height="42"/><rect x="62" y="20" width="4" height="42"/><rect x="72" y="20" width="4" height="42"/><rect x="82" y="20" width="4" height="42"/><rect x="92" y="20" width="4" height="42"/><rect x="102" y="20" width="4" height="42"/></g>
+          <rect x="16" y="40" width="16" height="30" rx="2" fill="#2462b8"/>
+          <rect x="128" y="40" width="16" height="30" rx="2" fill="#2462b8"/>
+          <rect x="54" y="96" width="52" height="8" rx="2" fill="#15232a"/>
+          <ellipse cx="74" cy="78" rx="14" ry="9" fill="#2a2d30" opacity="0.55"/>
+          <g class="heat"><path d="M60 12 q4 -6 0 -10" stroke="#7c8b91" stroke-width="2" fill="none"/><path d="M80 12 q4 -6 0 -10" stroke="#7c8b91" stroke-width="2" fill="none"/><path d="M100 12 q4 -6 0 -10" stroke="#7c8b91" stroke-width="2" fill="none"/></g>
+        </svg>
+        <span class="about-tag">Driver #3, RIP</span>
+      </div>
+      <div class="about-note">
+        <h2 id="about-title">Why I made this</h2>
+        <p>I built BotBench because I kept frying motor drivers. My first line follower cost me two L298Ns, a bag of jumper wires and most of a weekend, and the actual bug was one swapped pin.</p>
+        <p>Most of what goes wrong with a small robot is in the wiring and the code: a motor on a pin that can't do PWM, a sensor that reads HIGH when you expected LOW, a <code>delay()</code> that makes the loop too slow to steer. You can catch all of that before you plug in a battery.</p>
+        <p>So this is the bench I wanted back then. The parts act like the ones in my drawer, quirks included, and a failed run tells you what happened. It isn't real physics down to the last gram. If you find a case where your robot does something here that it wouldn't do on the floor, I'd like to hear about it.</p>
+        <p class="about-sign">— Prisha Patel</p>
+      </div>
+    </section>
+
+    <section class="faq" id="faq" aria-labelledby="faq-title">
+      <h2 id="faq-title">Questions people ask</h2>
+      <div class="faq-list">
+        <details>
+          <summary>Is it free?</summary>
+          <p>Yes. There's no paid version and nothing locked behind one.</p>
+        </details>
+        <details>
+          <summary>Do I need an account?</summary>
+          <p>No. Open the workbench and start. Your robot, arena and code are saved in this browser, so they'll be there next time on the same device. Make a free account if you want to keep more than one robot, open them on another computer, or get your times on the challenge boards. You can sign up with an email or with Google, GitHub or Apple.</p>
+        </details>
+        <details>
+          <summary>Does my code run on a real Arduino?</summary>
+          <p>It's meant to. You write normal Arduino C++ with <code>setup()</code>, <code>loop()</code>, <code>pinMode</code>, <code>analogWrite</code>, <code>pulseIn</code>, <code>Servo</code> and so on, then copy it into the Arduino IDE and upload. The simulator covers the subset most robot sketches use. Classes, structs and pointers aren't supported yet, and it will tell you if you use one.</p>
+        </details>
+        <details>
+          <summary>Which boards and parts are there?</summary>
+          <p>Boards: Arduino Uno, Nano, Mega 2560 and ESP32 DevKit. Motors: TT gear motors, N20 and 25GA-370. Drivers: L298N, L293D and TB6612FNG. Sensors: TCRT5000, 3 and 5-channel IR arrays, HC-SR04 ultrasonic and the Pixy2 camera. Plus an SG90 gripper, a few chassis and the usual battery packs.</p>
+        </details>
+        <details>
+          <summary>Does it work offline, or on my phone?</summary>
+          <p>Both. After your first visit the site is cached, so it opens without a connection. You can also add it to your home screen. It runs on a phone, though writing code is a lot nicer with a keyboard and a bigger screen.</p>
+        </details>
+        <details>
+          <summary>Why did my robot fail when the code looks right?</summary>
+          <p>Usually it's the hardware side. The motor is on a pin without PWM, the left and right wires are swapped, the driver's standby pin is never set HIGH, or the batteries are too weak once the L298N takes its 2 V. Sometimes the loop is just too slow because of a long <code>delay()</code> or a lot of <code>Serial.print</code>. When a run fails, the coach points at the spot on the track and tells you which of these it was.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="end mat-grid" aria-labelledby="end-title">
+      <div class="end-pip" aria-hidden="true">
+        <svg viewBox="0 0 220 180"><rect x="20" y="30" width="180" height="140" rx="44" fill="#f6f8f7"/><rect x="42" y="52" width="136" height="86" rx="26" fill="#15232a"/><rect class="ep-eye" x="72" y="76" width="26" height="36" rx="12" fill="#8bf0ff"/><rect class="ep-eye" x="122" y="76" width="26" height="36" rx="12" fill="#8bf0ff"/><line x1="110" y1="30" x2="110" y2="8" stroke="#9aa7ad" stroke-width="5" stroke-linecap="round"/><circle cx="110" cy="6" r="7" fill="#e2484e"/></svg>
+      </div>
+      <h2 id="end-title">Your robot is waiting on the bench</h2>
+      <p>Nothing to install, and no account unless you want one.</p>
+      <a class="btn big" href="/studio">Start building</a>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="foot-made">
+      <a class="brand" href="/">BotBench</a>
+      <span>Made by Prisha Patel, one burnt driver at a time.</span>
+    </div>
+    <nav aria-label="Footer">
+      <a href="/studio">Workbench</a>
+      <a href="#about">About</a>
+      <a href="#faq">FAQ</a>
+      <a href="#">GitHub</a>
+    </nav>
+    <span>&copy; <span id="year">2026</span> · Runs entirely in your browser.</span>
+  </footer>
+
+  <script type="module" src="/src/landing/main.js"></script>
+</body>
+</html>

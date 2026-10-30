@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="author" content="Prisha Patel">
+  <meta name="theme-color" content="#1c5a70">
+  <meta name="robots" content="noindex">
+  <title>Page not found · BotBench</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/src/styles/base.css">
+  <style>
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: 2rem 1rem;
+      color: #fff;
+      text-align: center;
+    }
+    main { display: grid; justify-items: center; gap: 1.25rem; max-width: 34rem; color: #fff; }
+    main .btn.ghost { color: #fff; }
+    .lost { width: min(240px, 60vw); height: auto; overflow: visible; }
+    .lost .head { transform-origin: 110px 150px; animation: tilt 3.2s var(--ease-in-out) infinite; }
+    .lost .q { animation: float 2.4s var(--ease-in-out) infinite; }
+    @keyframes tilt { 0%, 100% { transform: rotate(-9deg); } 50% { transform: rotate(7deg); } }
+    @keyframes float { 50% { transform: translateY(-6px); } }
+    .code { font-family: var(--mono); font-size: 0.9rem; color: var(--cyan); letter-spacing: 0.08em; }
+    h1 { font-size: clamp(1.8rem, 6vw, 2.8rem); }
+    p { color: rgba(255, 255, 255, 0.82); font-size: 1.1rem; }
+    .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 0.5rem; }
+  </style>
+</head>
+<body class="mat-grid">
+  <main>
+    <svg class="lost" viewBox="0 0 220 230" role="img" aria-label="Pip the robot, looking around, confused">
+      <text class="q" x="168" y="46" font-family="Unbounded, sans-serif" font-weight="700" font-size="44" fill="#f3c326">?</text>
+      <ellipse cx="110" cy="222" rx="70" ry="7" fill="rgba(0,0,0,0.25)"/>
+      <rect x="62" y="184" width="96" height="30" rx="15" fill="#23272a"/>
+      <rect x="54" y="140" width="112" height="56" rx="24" fill="#f6f8f7"/>
+      <rect x="74" y="152" width="72" height="26" rx="9" fill="#1c5a70"/>
+      <g class="head">
+        <line x1="110" y1="34" x2="110" y2="14" stroke="#9aa7ad" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="110" cy="10" r="7" fill="#e2484e"/>
+        <circle cx="26" cy="86" r="11" fill="#f3c326"/><circle cx="194" cy="86" r="11" fill="#f3c326"/>
+        <rect x="30" y="34" width="160" height="112" rx="36" fill="#f6f8f7"/>
+        <rect x="48" y="52" width="124" height="76" rx="22" fill="#15232a"/>
+        <rect x="76" y="70" width="22" height="32" rx="11" fill="#8bf0ff"/>
+        <rect x="124" y="78" width="22" height="18" rx="9" fill="#8bf0ff"/>
+        <path d="M96 114 q8 -6 14 0 t14 0" fill="none" stroke="#8bf0ff" stroke-width="4" stroke-linecap="round"/>
+      </g>
+    </svg>
+    <span class="code">ERROR 404</span>
+    <h1>Pip drove off the line</h1>
+    <p>There's nothing at this address. Maybe the link is old, or a pin got swapped somewhere.</p>
+    <div class="actions">
+      <a class="btn" href="/">Back to the start</a>
+      <a class="btn ghost" href="/studio">Open the workbench</a>
+    </div>
+  </main>
+</body>
+</html>
