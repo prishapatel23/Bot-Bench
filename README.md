@@ -40,7 +40,7 @@ Each sign-in button only shows once its keys are set:
 
 Apple needs a paid developer account and only redirects to https, so it can't be tried on localhost. Paste the whole .p8 file into `APPLE_PRIVATE_KEY`; `\n` in place of line breaks is fine. For local Google or GitHub testing, register `http://localhost:5173/api/oauth/google` (or `/github`) as a second redirect URL.
 
-The live site is https://bot-bench-gray.vercel.app. If it moves to its own domain, change that address in the `<head>` of `index.html` and `studio.html` so link previews pick up `og.png`.
+The live site is https://botbench-ws.vercel.app. If it moves to its own domain, change that address in the `<head>` of `index.html` and `studio.html` so link previews pick up `og.png`.
 
 ## Offline
 
