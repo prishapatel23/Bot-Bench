@@ -11,6 +11,13 @@ import '../ui/offline.js';
 
 applyIcons();
 
+// On phones the code is smaller than 16px, and iOS zooms into any focused text that
+// small. maximum-scale stops that; iOS still allows pinch zoom with it set.
+if (/iP(hone|od|ad)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+  const vp = document.querySelector('meta[name="viewport"]');
+  if (vp && !/maximum-scale/.test(vp.content)) vp.content += ', maximum-scale=1';
+}
+
 // ---------- tabs ----------
 
 const tabs = [...document.querySelectorAll('.tabs [role="tab"]')];
