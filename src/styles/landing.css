@@ -47,7 +47,19 @@ html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 @media (hover: hover) { .nav nav a:hover { opacity: 1; } }
 .nav-login { color: #fff; font-weight: 700; font-size: 0.95rem; text-decoration: none; opacity: 0.85; padding: 0.4rem 0.6rem; margin-left: 0.5rem; }
 @media (hover: hover) { .nav-login:hover { opacity: 1; text-decoration: underline; text-underline-offset: 3px; } }
-@media (max-width: 760px) { .nav nav { display: none; } .nav-login { margin-left: auto; } }
+.nav-login, .nav-cta { white-space: nowrap; }
+.nav .phone-only { display: none; }
+@media (max-width: 760px) {
+  .nav { gap: 0.6rem; }
+  .nav nav { display: none; }
+  .nav-login { margin-left: auto; }
+  .nav .wide-only { display: none; }
+  .nav .phone-only { display: inline; }
+  .hero-actions { flex-direction: column; align-items: stretch; width: min(100%, 22rem); margin-inline: auto; }
+  .hero-actions .btn { justify-content: center; }
+}
+/* the smallest phones keep the button and drop the text link; Log in is in the workbench too */
+@media (max-width: 370px) { .nav-login { display: none; } .nav-cta { margin-left: auto; } }
 
 /* ---------- hero ---------- */
 

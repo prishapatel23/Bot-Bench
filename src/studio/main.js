@@ -126,6 +126,37 @@ document.getElementById('btn-theme').addEventListener('click', () => {
 systemDark.addEventListener('change', () => { if (!savedTheme()) applyTheme(); });
 applyTheme();
 
+// ---------- phone menu ----------
+
+// On a phone, dark mode, the tour, export and import live behind one ⋯ button,
+// so the robot's name gets the room. Each item just presses the real button.
+const more = document.getElementById('btn-more');
+const moreMenu = document.getElementById('more-menu');
+
+function closeMore() {
+  moreMenu.hidden = true;
+  more.setAttribute('aria-expanded', 'false');
+}
+more.addEventListener('click', e => {
+  e.stopPropagation();
+  if (!moreMenu.hidden) { closeMore(); return; }
+  const dark = root.dataset.theme === 'dark';
+  setIcon(moreMenu.querySelector('[data-for="btn-theme"]'), dark ? 'sun' : 'moon', dark ? 'Light mode' : 'Dark mode');
+  moreMenu.hidden = false;
+  more.setAttribute('aria-expanded', 'true');
+  moreMenu.querySelector('button').focus();
+});
+moreMenu.addEventListener('click', e => {
+  const item = e.target.closest('[data-for]');
+  if (!item) return;
+  closeMore();
+  document.getElementById(item.dataset.for).click();
+});
+document.addEventListener('click', e => { if (!moreMenu.hidden && !moreMenu.contains(e.target)) closeMore(); });
+addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !moreMenu.hidden) { closeMore(); more.focus(); }
+});
+
 // ---------- canvas descriptions ----------
 
 // The arena canvas can be focused and its start moved with the keys, so say where it is
