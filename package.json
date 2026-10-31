@@ -2,7 +2,6 @@
   "name": "botbench",
   "version": "0.1.0",
   "private": true,
-  "author": "Prisha Patel",
   "type": "module",
   "scripts": {
     "dev": "vite",
